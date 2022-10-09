@@ -14,7 +14,7 @@ const clients = {};
 
 let clientIdCounter = 0;
 
-function broadcast(message, dontLog = true) {
+function broadcast(message, dontLog) {
 	!dontLog && log && log('BROADCAST', message);
 
 	for (const key in clients) {
@@ -30,13 +30,13 @@ function broadcast(message, dontLog = true) {
 const server = new Ws.WebSocketServer({ port: PORT });
 
 server.on('connection', (webSocket) => {
-	log && log('SERVER', 'ON', 'CONNECTION');
+	log && log('SERVER', 'ON CONNECTION');
 
 	const clientId = String(clientIdCounter++);
 	const client = { webSocket };
 
 	webSocket.on('message', (data, isBinary) => {
-		log && log('WEB SOCKET', 'ON', 'MESSAGE', data, isBinary, data.toString('utf8'));
+		log && log('WEB SOCKET', clientId, 'ON MESSAGE', data.toString('utf8'), isBinary);
 
 		try {
 			const message = JSON.parse(data.toString('utf8'));
@@ -50,7 +50,6 @@ server.on('connection', (webSocket) => {
 						sourceClientId: clientId, // TODO: Replace with WebRTC peer to peer connection
 						offer
 					});
-					log && log('WEB SOCKET', 'ON', 'MESSAGE', 'newMessage', newMessage);
 
 					clients[targetClientId] && clients[targetClientId].webSocket
 						&& clients[targetClientId].webSocket.send(newMessage);
@@ -65,7 +64,6 @@ server.on('connection', (webSocket) => {
 						sourceClientId: clientId, // TODO: Replace with WebRTC peer to peer connection
 						answer
 					});
-					log && log('WEB SOCKET', 'ON', 'MESSAGE', 'newMessage', newMessage);
 
 					clients[targetClientId] && clients[targetClientId].webSocket
 						&& clients[targetClientId].webSocket.send(newMessage);
@@ -74,16 +72,15 @@ server.on('connection', (webSocket) => {
 				}
 			}
 		} catch (error) {
-			log && log('WEB SOCKET', 'ON', 'MESSAGE', 'error', error);
+			log && log('WEB SOCKET', clientId, 'ON MESSAGE', error, error);
 		}
 	});
 
 	webSocket.on('close', (code, reason) => {
-		log && log('WEB SOCKET', 'ON', 'CLOSE', code, reason.toString('utf8'));
+		log && log('WEB SOCKET', clientId, 'ON CLOSE', code,  reason.toString('utf8'));
 
 		delete clients[clientId];
 
-		// TODO: Replace with WebRTC peer to peer connection
 		broadcast(JSON.stringify({
 			type: 'Remove Client',
 			clientId
@@ -99,7 +96,7 @@ server.on('connection', (webSocket) => {
 });
 
 server.on('close', () => {
-	log && log('WEB SOCKET', 'ON', 'CLOSE');
+	log && log('SERVER', 'ON CLOSE');
 
 	for (const key in clients) {
 		delete clients[key];
