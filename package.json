@@ -1,0 +1,30 @@
+{
+  "name": "jngo2-ws-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JamesRobertHugginsNgo/jngo2-ws-server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JamesRobertHugginsNgo/jngo2-ws-server/issues"
+  },
+  "homepage": "https://github.com/JamesRobertHugginsNgo/jngo2-ws-server#readme",
+  "engines": {
+    "node": "18.x"
+  },
+  "dependencies": {
+    "ws": "^8.9.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.25.0"
+  }
+}
