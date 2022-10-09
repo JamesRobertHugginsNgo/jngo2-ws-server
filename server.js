@@ -43,12 +43,12 @@ server.on('connection', (webSocket) => {
 			const type = message.type;
 
 			switch (type) {
-				case 'Set Order': {
-					const { targetClientId, order } = message;
+				case 'Set Offer': {
+					const { targetClientId, offer } = message;
 					const newMessage = JSON.stringify({
-						type: 'Set Order',
+						type: 'Set Offer',
 						sourceClientId: clientId, // TODO: Replace with WebRTC peer to peer connection
-						order
+						offer
 					});
 					log && log('WEB SOCKET', 'ON', 'MESSAGE', 'newMessage', newMessage);
 
