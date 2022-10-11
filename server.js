@@ -23,8 +23,19 @@ server.on('connection', (webSocket) => {
 	webSocket.on('message', (data) => {
 		try {
 			const message = JSON.parse(data.toString('utf8'));
-			message.from = clientId;
-			sendMessage(message);
+
+			switch (message.type) {
+				case 'Ping': {
+					message.to = clientId;
+					sendMessage(message);
+					break;
+				}
+
+				default: {
+					message.from = clientId;
+					sendMessage(message);
+				}
+			}
 
 			sendMessage({
 				type: 'Log',
