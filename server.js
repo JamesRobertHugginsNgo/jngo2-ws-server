@@ -7,9 +7,11 @@ let clientIdCounter = 0;
 
 function sendMessage(message) {
 	if (message.to) {
-		clients[message.to].send(JSON.stringify(message));
+		clients[message.to].webSocket.send(JSON.stringify(message));
 	} else {
-		clients.forEach((client) => void client.send(JSON.stringify(message)));
+		for (const key in clients) {
+			clients[key].webSocket.send(JSON.stringify(message));
+		}
 	}
 }
 
