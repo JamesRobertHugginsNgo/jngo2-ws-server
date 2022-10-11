@@ -2,6 +2,10 @@ const Ws = require('ws');
 
 const PORT = process.env.PORT || 80;
 
+const log = (...messages) => {
+	console.log(...messages);
+};
+
 const clients = {};
 let clientIdCounter = 0;
 
@@ -18,9 +22,13 @@ function sendMessage(message) {
 const server = new Ws.WebSocketServer({ port: PORT });
 
 server.on('connection', (webSocket) => {
+	log && log('SERVER - ON CONNECTION');
+
 	const clientId = String(clientIdCounter++);
 
 	webSocket.on('message', (data) => {
+		log && log('WEB SOCKET - ON MESSAGE');
+
 		try {
 			const message = JSON.parse(data.toString('utf8'));
 
@@ -44,6 +52,8 @@ server.on('connection', (webSocket) => {
 				clientId
 			});
 		} catch (error) {
+			log && log('WEB SOCKET - ON MESSAGE - ERROR');
+
 			sendMessage({
 				type: 'Log',
 				log: 'Web Socket - On Message - Error',
@@ -54,6 +64,8 @@ server.on('connection', (webSocket) => {
 	});
 
 	webSocket.on('close', (code, reason) => {
+		log && log('WEB SOCKET - ON CLOSE');
+
 		delete clients[clientId];
 		sendMessage({
 			type: 'Remove',
@@ -83,6 +95,8 @@ server.on('connection', (webSocket) => {
 });
 
 server.on('close', () => {
+	log && log('SERVER - ON CLOSE');
+
 	for (const key in clients) {
 		delete clients[key];
 	}
