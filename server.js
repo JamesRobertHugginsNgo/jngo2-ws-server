@@ -50,7 +50,7 @@ server.on('connection', (webSocket) => {
 			from: clientId
 		});
 
-		console.log('WEB SOCKET ON CLOSE', clientId, code, reason);
+		console.log('WEB SOCKET ON CLOSE', clientId, code, reason.toString('utf8'));
 	});
 
 	sendMessage({
