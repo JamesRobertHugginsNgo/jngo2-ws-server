@@ -37,7 +37,7 @@ server.on('connection', (webSocket) => {
 				}
 			}
 
-			console.log('WEB SOCKET ON MESSAGE ERROR', clientId, JSON.stringify(message));
+			console.log('WEB SOCKET ON MESSAGE', clientId, JSON.stringify(message));
 		} catch (error) {
 			console.log('WEB SOCKET ON MESSAGE ERROR', clientId, JSON.stringify(error));
 		}
